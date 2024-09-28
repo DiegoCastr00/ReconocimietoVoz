@@ -4,8 +4,8 @@ clear;
 A = 2; % Amplitud de la señal
 des = deg2rad(45); % Desplazamiento de fase
 f = 125; % Frecuencia de la señal
-fs = 1000; % Frecuencia de muestreo
-tiempo = 10; % Tiempo total de grabación (milisegundos)
+fs = 200; % Frecuencia de muestreo
+tiempo = 1000; % Tiempo total de grabación (milisegundos)
 
 T = tiempo/1000; % mili a segundos
 Ts = 1/fs; % Periodo de muestreo
