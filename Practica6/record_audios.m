@@ -1,4 +1,4 @@
-outputFolder = 'Diego_Test'; 
+outputFolder = 'Miguel_Test'; 
 if ~exist(outputFolder, 'dir')
     mkdir(outputFolder);
 end
