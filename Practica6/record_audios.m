@@ -22,10 +22,10 @@ for i = 1:10
     recordblocking(recorder, duration);
     audioData = getaudiodata(recorder);
 
-    outputFileName = fullfile(outputFolder, sprintf('%d.wav', i));
+    outputFileName = fullfile(outputFolder, sprintf('%d_%s.wav', i, outputFolder));
     audiowrite(outputFileName, audioData, fs);
     
-    fprintf('Audio %d guardado como "%d.wav"\n', i, i);
+    fprintf('Audio %d guardado como "%d_%s.wav"\n', i, i, outputFolder);
 end
 
 fprintf('Todos los audios han sido grabados y guardados en la carpeta "%s".\n', outputFolder);
