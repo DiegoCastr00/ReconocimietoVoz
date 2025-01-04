@@ -8,7 +8,7 @@ DURATION = 1
 SAMPLE_RATE = 44100  
 NUM_RECORDINGS = 100
 
-OUTPUT_FOLDER = "frio"  # Carpeta de salida
+OUTPUT_FOLDER = "luz"  # Carpeta de salida
 FILE_NAME = f"Valeria_{OUTPUT_FOLDER}"  # Nombre del archivo
 
 if not os.path.exists(OUTPUT_FOLDER):
