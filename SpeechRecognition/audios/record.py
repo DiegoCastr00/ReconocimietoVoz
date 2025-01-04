@@ -6,7 +6,7 @@ from scipy.io.wavfile import write
 
 DURATION = 1  
 SAMPLE_RATE = 44100  
-NUM_RECORDINGS = 40
+NUM_RECORDINGS = 2
 
 OUTPUT_FOLDER = "alto"  # Carpeta de salida
 FILE_NAME = f"Miguel_{OUTPUT_FOLDER}"  # Nombre del archivo
@@ -31,6 +31,6 @@ for i in range(1, NUM_RECORDINGS + 1):
     print(f"Audio {i} guardado como '{filename}'.")
     
     
-    # time.sleep(1) #Quitalo si quereis mas velocidad 
+    time.sleep(1) #Quitalo si quereis mas velocidad 
 
 print("Grabaciones completadas.")
