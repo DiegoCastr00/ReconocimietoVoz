@@ -8,7 +8,7 @@ DURATION = 1
 SAMPLE_RATE = 44100  
 NUM_RECORDINGS = 100
 
-OUTPUT_FOLDER = "casa"  # Carpeta de salida
+OUTPUT_FOLDER = "cero"  # Carpeta de salida
 FILE_NAME = f"Valeria_{OUTPUT_FOLDER}"  # Nombre del archivo
 
 if not os.path.exists(OUTPUT_FOLDER):
@@ -31,6 +31,6 @@ for i in range(1, NUM_RECORDINGS + 1):
     print(f"Audio {i} guardado como '{filename}'.")
     
     
-    time.sleep(1) #Quitalo si quereis mas velocidad 
+    # time.sleep(1) #Quitalo si quereis mas velocidad 
 
 print("Grabaciones completadas.")
