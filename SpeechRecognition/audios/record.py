@@ -6,9 +6,9 @@ from scipy.io.wavfile import write
 
 DURATION = 1  
 SAMPLE_RATE = 44100  
-NUM_RECORDINGS = 10
+NUM_RECORDINGS = 2
 
-OUTPUT_FOLDER = "uno"  # Carpeta de salida
+OUTPUT_FOLDER = "casa"  # Carpeta de salida
 FILE_NAME = f"Miguel_{OUTPUT_FOLDER}"  # Nombre del archivo
 
 if not os.path.exists(OUTPUT_FOLDER):
