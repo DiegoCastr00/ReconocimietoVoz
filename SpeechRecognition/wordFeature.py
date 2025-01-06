@@ -213,11 +213,10 @@ class WordFeatureExtractor:
             'onset_strength_std': np.std(onset_env)
         })
         
-        # Tempo y beats
         tempo, _ = librosa.beat.beat_track(y=audio, 
-                                         sr=self.sample_rate,
-                                         hop_length=self.frame_step)
-        features['tempo'] = tempo
+                                        sr=self.sample_rate,
+                                        hop_length=self.frame_step)
+        features['tempo'] = np.asarray(tempo).item()
         
         return features
     
