@@ -48,15 +48,16 @@ class SpeakerFeatureExtractor:
     def _extract_fundamental_features(self, audio):
         """Extrae características fundamentales de la voz."""
         features = {}
+            
+        # Pitch (F0) usando PYIN
+        f0, voiced_flag, voiced_probs = librosa.pyin(audio,
+                                                fmin=librosa.note_to_hz('C2'),
+                                                fmax=librosa.note_to_hz('C7'),
+                                                sr=self.sample_rate)
         
-        # Pitch (F0) usando PYIN (más preciso que YIN)
-        f0, voiced_flag, voiced_probs = librosa.pyin(audio, 
-                                                   fmin=librosa.note_to_hz('C2'),
-                                                   fmax=librosa.note_to_hz('C7'),
-                                                   sr=self.sample_rate)
+        # Estadísticas de F0 (con manejo de casos sin voz)
+        f0_voiced = f0[voiced_flag] if voiced_flag is not None else np.array([])
         
-        # Estadísticas de F0 (solo para frames con voz)
-        f0_voiced = f0[voiced_flag]
         if len(f0_voiced) > 0:
             features.update({
                 'f0_mean': np.mean(f0_voiced),
@@ -67,6 +68,23 @@ class SpeakerFeatureExtractor:
                 'f0_skew': skew(f0_voiced),
                 'f0_kurtosis': kurtosis(f0_voiced)
             })
+        else:
+            # Valores por defecto cuando no se detecta voz
+            features.update({
+                'f0_mean': 0.0,
+                'f0_std': 0.0,
+                'f0_min': 0.0,
+                'f0_max': 0.0,
+                'f0_range': 0.0,
+                'f0_skew': 0.0,
+                'f0_kurtosis': 0.0
+            })
+        
+        # Añadir métrica de proporción de frames con voz
+        total_frames = len(voiced_flag) if voiced_flag is not None else 0
+        voiced_frames = np.sum(voiced_flag) if voiced_flag is not None else 0
+        features['voiced_ratio'] = voiced_frames / total_frames if total_frames > 0 else 0.0
+    
         
         # Porcentaje de frames con voz
         features['voiced_fraction'] = np.mean(voiced_flag)
