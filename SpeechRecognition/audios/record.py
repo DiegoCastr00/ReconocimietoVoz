@@ -6,9 +6,9 @@ from scipy.io.wavfile import write
 
 DURATION = 1
 SAMPLE_RATE = 44100  
-NUM_RECORDINGS = 50
+NUM_RECORDINGS = 10
 
-OUTPUT_FOLDER = "uno"  # Carpeta de salida
+OUTPUT_FOLDER = "frio"  # Carpeta de salida
 FILE_NAME = f"Nancy_{OUTPUT_FOLDER}"  # Nombre del archivo
 
 if not os.path.exists(OUTPUT_FOLDER):
@@ -21,7 +21,7 @@ for i in range(3):
 print("Comenzando grabaciones...")
     
 # Grabar audios
-for i in range(30, NUM_RECORDINGS + 1):
+for i in range(4, NUM_RECORDINGS + 1):
     print(f"Grabando audio {i}/{NUM_RECORDINGS}...")
     audio_data = sd.rec(int(DURATION * SAMPLE_RATE), samplerate=SAMPLE_RATE, channels=1, dtype='int16')
     sd.wait() 
