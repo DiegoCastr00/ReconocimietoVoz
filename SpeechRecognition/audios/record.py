@@ -8,7 +8,7 @@ DURATION = 1
 SAMPLE_RATE = 44100  
 NUM_RECORDINGS = 50
 
-OUTPUT_FOLDER = "casa"  # Carpeta de salida
+OUTPUT_FOLDER = "si"  # Carpeta de salida
 FILE_NAME = f"Mike_{OUTPUT_FOLDER}"  # Nombre del archivo
 
 if not os.path.exists(OUTPUT_FOLDER):
