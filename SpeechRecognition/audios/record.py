@@ -4,11 +4,11 @@ import time
 import sounddevice as sd
 from scipy.io.wavfile import write
 
-DURATION = 1  
+DURATION = 1
 SAMPLE_RATE = 44100  
 NUM_RECORDINGS = 50
 
-OUTPUT_FOLDER = "baja"  # Carpeta de salida
+OUTPUT_FOLDER = "casa"  # Carpeta de salida
 FILE_NAME = f"Diego_{OUTPUT_FOLDER}"  # Nombre del archivo
 
 if not os.path.exists(OUTPUT_FOLDER):
