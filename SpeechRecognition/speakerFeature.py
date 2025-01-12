@@ -188,7 +188,10 @@ class SpeakerFeatureExtractor:
         if len(f0_voiced) > 1:
             # Jitter como la variación relativa promedio entre períodos consecutivos
             jitter = np.mean(np.abs(np.diff(f0_voiced))) / np.mean(f0_voiced)
-            features['jitter'] = jitter
+        else: 
+            jitter = 0.0
+            
+        features['jitter'] = jitter
         
         # Shimmer (variación de la amplitud)
         rms = librosa.feature.rms(y=audio,
