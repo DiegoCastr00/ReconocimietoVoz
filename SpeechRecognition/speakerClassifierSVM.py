@@ -11,7 +11,7 @@ class SpeakerClassifierSVM:
         self.model = SVC(
             C=10,
             kernel='rbf',
-            gamma='scale',
+            gamma=0.001,
             probability=True,
             random_state=42
         )
