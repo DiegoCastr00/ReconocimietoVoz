@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 class WordClassifierSVM:
     def __init__(self):
         self.model = SVC(
-            C=10,
+            # C=0.1,
             kernel='rbf',
             gamma='scale',
             probability=True,

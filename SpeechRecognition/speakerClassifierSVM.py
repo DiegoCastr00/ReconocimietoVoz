@@ -9,9 +9,8 @@ import matplotlib.pyplot as plt
 class SpeakerClassifierSVM:
     def __init__(self):
         self.model = SVC(
-            C=10,
             kernel='rbf',
-            gamma=0.001,
+            gamma='scale',
             probability=True,
             random_state=42
         )

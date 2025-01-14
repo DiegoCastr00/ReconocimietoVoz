@@ -11,8 +11,8 @@ from preprocesing import AudioPreprocessor
 from speakerFeature import SpeakerFeatureExtractor
 from wordFeature import WordFeatureExtractor
 from wordClassifierSVM import WordClassifierSVM
-from speakerClassifierSVM import SpeakerClassifierSVM
-
+# from speakerClassifierSVM import SpeakerClassifierSVM
+from speakerClassifierRF import SpeakerClassifierRF
 def create_feature_dataset(audio_files, preprocessor, speaker_extractor, word_extractor, wordModel, speakerModel):
     # Preprocesar audio
     audio = preprocessor.process_audio(audio_files)
@@ -62,8 +62,8 @@ def create_recorder_app():
     preprocessor = AudioPreprocessor()
     speaker_extractor = SpeakerFeatureExtractor()
     word_extractor = WordFeatureExtractor()
-    wordModel = WordClassifierSVM.load_model('wordClassifier.joblib')
-    speakerModel = SpeakerClassifierSVM.load_model('speakerClassifier.joblib')
+    wordModel = SpeakerClassifierRF.load_model('wordClassifierXG.joblib')
+    speakerModel = SpeakerClassifierRF.load_model('speakerClassifierXG.joblib')
     
     # Inicializar estado
     if 'recording' not in st.session_state:
@@ -103,9 +103,7 @@ def create_recorder_app():
                                                                     word_extractor,
                                                                     wordModel,
                                                                     speakerModel)
-            
-            print(f"Palabra detectada: {wordLabel}")
-            
+                        
             st.session_state.audio_file = filename
             st.session_state.recording = False
     
@@ -115,9 +113,9 @@ def create_recorder_app():
         st.write("📼 Audio Grabado:")
         st.audio(st.session_state.audio_file)
         
-        st.write("---")
-        st.write("📼 Audio Modificado:")
-        st.audio(audio, sample_rate=SAMPLE_RATE)
+        # st.write("---")
+        # st.write("📼 Audio Modificado:")
+        # st.audio(audio, sample_rate=SAMPLE_RATE)
         
         col1, col2 = st.columns(2)
         with col1:
