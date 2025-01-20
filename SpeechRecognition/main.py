@@ -11,8 +11,9 @@ from preprocesing import AudioPreprocessor
 from speakerFeature import SpeakerFeatureExtractor
 from wordFeature import WordFeatureExtractor
 from wordClassifierSVM import WordClassifierSVM
-# from speakerClassifierSVM import SpeakerClassifierSVM
-from speakerClassifierRF import SpeakerClassifierRF
+from speakerClassifierSVM import SpeakerClassifierSVM
+#
+# from speakerClassifierRF import SpeakerClassifierRF
 def create_feature_dataset(audio_files, preprocessor, speaker_extractor, word_extractor, wordModel, speakerModel):
     # Preprocesar audio
     audio = preprocessor.process_audio(audio_files)
@@ -62,8 +63,8 @@ def create_recorder_app():
     preprocessor = AudioPreprocessor()
     speaker_extractor = SpeakerFeatureExtractor()
     word_extractor = WordFeatureExtractor()
-    wordModel = SpeakerClassifierRF.load_model('wordClassifierXG.joblib')
-    speakerModel = SpeakerClassifierRF.load_model('speakerClassifierXG.joblib')
+    wordModel = WordClassifierSVM.load_model('wordClassifier.joblib')
+    speakerModel = SpeakerClassifierSVM.load_model('speakerClassifier.joblib')
     
     # Inicializar estado
     if 'recording' not in st.session_state:
@@ -72,8 +73,26 @@ def create_recorder_app():
         st.session_state.audio_file = None
     
     col1, col2, col3 = st.columns([1, 1, 1])
-    
+    with col1:
+        st.write("### Palabras")
+        st.markdown("""
+        - Alto  
+        - Baja  
+        - Casa  
+        - Cero  
+        - Frío  
+        """)
+
     with col2:
+        st.write("### ")
+        st.markdown("""
+        - Luz  
+        - No  
+        - Ocho  
+        - Sí  
+        - Uno  
+        """)
+    with col3:
         # Botón de grabación
         if st.button("🎙️ Grabar Audio"):
             clean_state()  # Limpiar estado y variables
@@ -107,6 +126,8 @@ def create_recorder_app():
             st.session_state.audio_file = filename
             st.session_state.recording = False
     
+
+        
     # Mostrar audio grabado y resultados
     if st.session_state.audio_file and os.path.exists(st.session_state.audio_file):
         st.write("---")
