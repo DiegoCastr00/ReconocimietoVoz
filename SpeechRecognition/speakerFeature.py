@@ -49,7 +49,7 @@ class SpeakerFeatureExtractor:
         """Extrae características fundamentales de la voz."""
         features = {}
             
-        # Pitch (F0) usando PYIN
+        # Pitch (F0) usando PYIN: La frecuencia fundamental de la voz
         f0, voiced_flag, voiced_probs = librosa.pyin(audio,
                                                 fmin=librosa.note_to_hz('C2'),
                                                 fmax=librosa.note_to_hz('C7'),
@@ -95,7 +95,7 @@ class SpeakerFeatureExtractor:
         """Extrae características prosódicas."""
         features = {}
         
-        # Energía y sus variaciones
+        # Energía y sus variaciones 
         rms = librosa.feature.rms(y=audio,
                                 frame_length=self.frame_length,
                                 hop_length=self.frame_step)[0]
@@ -126,6 +126,7 @@ class SpeakerFeatureExtractor:
         features = {}
         
         # MFCC con más coeficientes para capturar características del tracto vocal
+        # Más coeficientes porque necesitamos más detalle del tracto voca
         mfccs = librosa.feature.mfcc(y=audio, 
                                    sr=self.sample_rate,
                                    n_mfcc=self.n_mfcc,
@@ -150,16 +151,23 @@ class SpeakerFeatureExtractor:
                 f'mfcc_{i}_delta2_std': np.std(mfccs_delta2[i])
             })
         
-        # Formantes (resonancias del tracto vocal)
+        # Formantes (resonancias del tracto vocal: Permite ver cómo cambian las frecuencias a lo largo del tiempo
+        # y cómo se relacionan con la frecuencia fundamental)
         spec = np.abs(librosa.stft(audio, n_fft=self.frame_length, 
                                  hop_length=self.frame_step, 
                                  window=self.window))
         
         # Características espectrales adicionales
+        #Indica dónde se concentra la mayor parte de la energía 
+        #Un centroide alto indica una voz más "brillante"
+        #Un centroide bajo indica una voz más "oscura" o grave
         spectral_centroid = librosa.feature.spectral_centroid(S=spec, 
                                                             sr=self.sample_rate)[0]
+        
+        #Mide qué tan "amplio" es el espectro alrededor del centroide
         spectral_bandwidth = librosa.feature.spectral_bandwidth(S=spec, 
                                                               sr=self.sample_rate)[0]
+        #Mide la diferencia entre picos y valles en el espectro
         spectral_contrast = librosa.feature.spectral_contrast(S=spec, 
                                                             sr=self.sample_rate)
         
@@ -175,7 +183,9 @@ class SpeakerFeatureExtractor:
         return features
     
     def _extract_voice_quality_features(self, audio):
-        """Extrae características de calidad de voz."""
+        """Extrae características de calidad de voz.
+            Características únicas de la "textura" de la voz:
+        """
         features = {}
         
         # Jitter (variación de la frecuencia fundamental)
@@ -188,7 +198,10 @@ class SpeakerFeatureExtractor:
         if len(f0_voiced) > 1:
             # Jitter como la variación relativa promedio entre períodos consecutivos
             jitter = np.mean(np.abs(np.diff(f0_voiced))) / np.mean(f0_voiced)
-            features['jitter'] = jitter
+        else: 
+            jitter = 0.0
+            
+        features['jitter'] = jitter
         
         # Shimmer (variación de la amplitud)
         rms = librosa.feature.rms(y=audio,
@@ -199,8 +212,7 @@ class SpeakerFeatureExtractor:
             shimmer = np.mean(np.abs(np.diff(rms))) / np.mean(rms)
             features['shimmer'] = shimmer
         
-        # Harmonics-to-Noise Ratio (HNR)
-        # Aproximado usando la relación entre energía armónica y ruido
+        # Harmonics-to-Noise Ratio (HNR):  Proporción entre sonido armónico y ruido
         S = np.abs(librosa.stft(audio, n_fft=self.frame_length, 
                                hop_length=self.frame_step, 
                                window=self.window))

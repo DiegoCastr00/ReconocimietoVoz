@@ -58,14 +58,14 @@ class WordFeatureExtractor:
                                                frame_length=self.frame_length, 
                                                hop_length=self.frame_step)[0]
         features.update({
-            'zcr_mean': np.mean(zcr),
-            'zcr_std': np.std(zcr),
-            'zcr_skew': skew(zcr),
-            'zcr_kurtosis': kurtosis(zcr),
-            'zcr_median': np.median(zcr)
+            'zcr_mean': np.mean(zcr), # Media
+            'zcr_std': np.std(zcr), # Desviación estándar
+            'zcr_skew': skew(zcr), #Asimetría (skew): Hacia dónde se inclina la distribución
+            'zcr_kurtosis': kurtosis(zcr), # Qué tan puntiaguda es la distribución
+            'zcr_median': np.median(zcr)  # Mediana
         })
         
-        # Amplitud envelope
+        # Amplitud envelope: La forma general de la onda, útil para detectar patrones de intensidad
         envelope = np.abs(scipy.signal.hilbert(audio))
         features.update({
             'envelope_mean': np.mean(envelope),
@@ -80,7 +80,7 @@ class WordFeatureExtractor:
         """Extrae características del dominio espectral."""
         features = {}
         
-        # Centroide espectral
+        # Centroide espectral: El "centro de masa" del espectro. Indica si dominan frecuencias altas o bajas.
         spectral_centroids = librosa.feature.spectral_centroid(y=audio, 
                                                              sr=self.sample_rate,
                                                              n_fft=self.frame_length,
@@ -92,7 +92,7 @@ class WordFeatureExtractor:
             'spectral_centroid_skew': skew(spectral_centroids)
         })
         
-        # Rolloff espectral
+        # Rolloff espectral: Frecuencia debajo de la cual está el 85% de la energía.
         spectral_rolloff = librosa.feature.spectral_rolloff(y=audio, 
                                                           sr=self.sample_rate,
                                                           n_fft=self.frame_length,
@@ -103,7 +103,7 @@ class WordFeatureExtractor:
             'spectral_rolloff_std': np.std(spectral_rolloff)
         })
         
-        # Ancho de banda espectral
+        # Ancho de banda espectral: Dispersión de las frecuencias alrededor del centroide.
         spectral_bandwidth = librosa.feature.spectral_bandwidth(y=audio, 
                                                               sr=self.sample_rate,
                                                               n_fft=self.frame_length,
@@ -114,7 +114,7 @@ class WordFeatureExtractor:
             'spectral_bandwidth_std': np.std(spectral_bandwidth)
         })
         
-        # Contraste espectral
+        # Contraste espectral: Diferencia entre picos y valles en el espectro.
         spectral_contrast = librosa.feature.spectral_contrast(y=audio, 
                                                             sr=self.sample_rate,
                                                             n_fft=self.frame_length,
@@ -124,7 +124,7 @@ class WordFeatureExtractor:
             'spectral_contrast_std': np.std(spectral_contrast)
         })
         
-        # Flatness espectral
+        # Flatness espectral: Qué tan similar es el espectro a ruido blanco vs. tono puro.
         spectral_flatness = librosa.feature.spectral_flatness(y=audio,
                                                             n_fft=self.frame_length,
                                                             hop_length=self.frame_step)[0]
@@ -148,7 +148,7 @@ class WordFeatureExtractor:
                                window=self.window,
                                n_mels=self.nfilt) 
     
-        # Delta y Delta-Delta
+        # Delta y Delta-Delta: Cambios de primer y segundo orden de los MFCC.
         mfccs_delta = librosa.feature.delta(mfccs)
         mfccs_delta2 = librosa.feature.delta(mfccs, order=2)
         
@@ -170,7 +170,7 @@ class WordFeatureExtractor:
         """Extrae características relacionadas con la energía."""
         features = {}
         
-        # RMS Energy
+        # RMS Energy (Root Mean Square): Magnitud promedio de la señal.
         rms = librosa.feature.rms(y=audio,
                                 frame_length=self.frame_length,
                                 hop_length=self.frame_step)[0]
@@ -181,7 +181,7 @@ class WordFeatureExtractor:
             'rms_kurtosis': kurtosis(rms)
         })
         
-        # Energía por bandas de frecuencia
+        # Energía por bandas de frecuencia (Mel Spectrogram): 
         mel_spec = librosa.feature.melspectrogram(y=audio, 
                                                 sr=self.sample_rate,
                                                 n_fft=self.frame_length,
@@ -204,7 +204,7 @@ class WordFeatureExtractor:
         """Extrae características rítmicas."""
         features = {}
         
-        # Onset strength
+        # Onset strength (ataque): Dónde comienzan los eventos sonoros.  Detecta inicios de sonidos.
         onset_env = librosa.onset.onset_strength(y=audio, 
                                                sr=self.sample_rate,
                                                hop_length=self.frame_step)
@@ -213,7 +213,8 @@ class WordFeatureExtractor:
             'onset_strength_std': np.std(onset_env)
         })
         
-        tempo, _ = librosa.beat.beat_track(y=audio, 
+        # Tempo: Velocidad de la habla en BPM.
+        tempo, _ = librosa.beat.beat_track(y=audio,  
                                         sr=self.sample_rate,
                                         hop_length=self.frame_step)
         features['tempo'] = np.asarray(tempo).item()
@@ -223,10 +224,6 @@ class WordFeatureExtractor:
     def process_audio(self, audio):
         """
         Procesa un audio y extrae todas sus características.
-        
-        Args:
-            audio (numpy.array): Señal de audio preprocesada
-            
         Returns:
             dict: Diccionario con todas las características
         """

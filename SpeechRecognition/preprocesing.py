@@ -12,6 +12,10 @@ class AudioPreprocessor:
         audio, sr = librosa.load(file_path, sr=self.sample_rate)
         return audio
     
+    def remove_silence(self, audio, top_db=30):
+        """Elimina silencios al inicio y final del audio."""
+        return librosa.effects.trim(audio, top_db=top_db)[0]
+    
     def normalize_volume(self, audio, target_dBFS=-20):
         """Normaliza el volumen del audio a un nivel objetivo en dBFS."""
         rms = librosa.feature.rms(y=audio)[0]
@@ -22,10 +26,6 @@ class AudioPreprocessor:
         # Prevenir clipping
         normalized_audio = np.clip(normalized_audio, -1.0, 1.0)
         return normalized_audio
-    
-    def remove_silence(self, audio, top_db=30):
-        """Elimina silencios al inicio y final del audio."""
-        return librosa.effects.trim(audio, top_db=top_db)[0]
     
     def apply_bandpass_filter(self, audio, lowcut=80, highcut=8000):
         """Aplica un filtro paso banda para reducir ruido."""
